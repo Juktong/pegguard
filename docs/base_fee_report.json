@@ -1,0 +1,56 @@
+{
+  "current_base_pips": 500,
+  "rows": [
+    {
+      "current_base_pips": 500,
+      "current_net_bps": -0.6165820196697983,
+      "current_surplus_vs_1bps_pips": -162,
+      "current_surplus_vs_5bps_pips": -562,
+      "current_surplus_vs_zero_pips": -62,
+      "extra_e6": 2904242075,
+      "markout_e6": 41864564854,
+      "notional_e6": 69366660955999,
+      "required_base_pips_1bps": 662,
+      "required_base_pips_5bps": 1062,
+      "required_base_pips_zero": 562,
+      "strategy": "PegGuard live shadow",
+      "window": "live shadow"
+    },
+    {
+      "current_base_pips": 500,
+      "current_net_bps": 1.8881547603732145,
+      "current_surplus_vs_1bps_pips": 88,
+      "current_surplus_vs_5bps_pips": -312,
+      "current_surplus_vs_zero_pips": 188,
+      "extra_e6": 95870346,
+      "markout_e6": 417029131,
+      "notional_e6": 1032053511130,
+      "required_base_pips_1bps": 412,
+      "required_base_pips_5bps": 812,
+      "required_base_pips_zero": 312,
+      "strategy": "PegGuard selected",
+      "window": "calm"
+    },
+    {
+      "current_base_pips": 500,
+      "current_net_bps": -0.472968953924909,
+      "current_surplus_vs_1bps_pips": -148,
+      "current_surplus_vs_5bps_pips": -548,
+      "current_surplus_vs_zero_pips": -48,
+      "extra_e6": 2783019326,
+      "markout_e6": 10886183493,
+      "notional_e6": 14805795796719,
+      "required_base_pips_1bps": 648,
+      "required_base_pips_5bps": 1048,
+      "required_base_pips_zero": 548,
+      "strategy": "PegGuard selected",
+      "window": "vol"
+    }
+  ],
+  "source": "/home/matseoi/workstation/uniswap/pegguard/docs/live-shadow-20260607T082122Z/economic_tests.json",
+  "target_net_bps": [
+    0,
+    1,
+    5
+  ]
+}

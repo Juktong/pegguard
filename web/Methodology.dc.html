@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #07080C; color: #EEF1F6; font-family: 'Hanken Grotesk', sans-serif; -webkit-font-smoothing: antialiased; }
+  ::selection { background: rgba(61,224,160,0.28); }
+  a { color: inherit; text-decoration: none; }
+  table { border-collapse: collapse; width: 100%; }
+  @media (max-width: 920px) { .pg-2col { grid-template-columns: 1fr !important; } .pg-nav-links { display: none !important; } .pg-scroll { overflow-x: auto; } }
+</style>
+</helmet>
+
+<div style="position:relative;min-height:100vh;overflow:hidden;">
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background:#07080C;">
+    <div style="position:absolute;top:-10%;left:-8%;width:54%;height:56%;background:radial-gradient(circle at 30% 30%, rgba(61,224,160,0.10), transparent 62%);filter:blur(24px);"></div>
+    <div style="position:absolute;top:30%;right:-12%;width:54%;height:60%;background:radial-gradient(circle at 70% 30%, rgba(154,134,255,0.09), transparent 60%);filter:blur(26px);"></div>
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);background-size:64px 64px;mask-image:radial-gradient(circle at 50% 10%, black, transparent 80%);"></div>
+  </div>
+
+  <div style="position:relative;z-index:2;">
+    <nav style="position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);background:rgba(7,8,12,0.66);border-bottom:1px solid rgba(255,255,255,0.07);">
+      <div style="max-width:1100px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
+        <a href="PegGuard.dc.html" style="display:flex;align-items:center;gap:11px;">
+          <svg width="26" height="30" viewBox="0 0 26 30" fill="none" aria-hidden="true">
+            <path d="M13 1.5 L24 5.5 V15 C24 22.5 19 27 13 28.8 C7 27 2 22.5 2 15 V5.5 Z" fill="url(#sg2)" stroke="rgba(61,224,160,0.55)" stroke-width="1.2"/>
+            <path d="M7 15.4 L11 19.2 L19 10.6" stroke="#07080C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs><linearGradient id="sg2" x1="2" y1="1.5" x2="24" y2="28.8"><stop stop-color="#3DE0A0"/><stop offset="1" stop-color="#14B981"/></linearGradient></defs>
+          </svg>
+          <div style="display:flex;flex-direction:column;line-height:1;">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;letter-spacing:-0.01em;">PegGuard</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.16em;color:#5E6675;margin-top:3px;text-transform:uppercase;">Methodology &amp; data</span>
+          </div>
+        </a>
+        <div class="pg-nav-links" style="display:flex;align-items:center;gap:26px;font-size:14px;color:#9AA4B4;font-weight:500;">
+          <a href="#setup" style-hover="color:#EEF1F6;">Setup</a>
+          <a href="#sweeps" style-hover="color:#EEF1F6;">Sweeps</a>
+          <a href="#sentinel" style-hover="color:#EEF1F6;">Sentinel</a>
+          <a href="#buckets" style-hover="color:#EEF1F6;">Size buckets</a>
+          <a href="#caveats" style-hover="color:#EEF1F6;">Caveats</a>
+        </div>
+        <a href="PegGuard.dc.html" style="font-size:13.5px;font-weight:600;padding:9px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);color:#C9D0DB;" style-hover="border-color:rgba(255,255,255,0.28);">&larr; Overview</a>
+      </div>
+    </nav>
+
+    <header style="max-width:1100px;margin:0 auto;padding:72px 28px 36px;">
+      <div style="display:inline-flex;align-items:center;gap:9px;padding:7px 13px;border-radius:999px;border:1px solid rgba(61,224,160,0.28);background:rgba(61,224,160,0.07);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#7EE9C0;margin-bottom:24px;">DATA PROVENANCE &amp; SWEEPS</div>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:60px;line-height:1.0;letter-spacing:-0.03em;margin:0 0 20px;max-width:760px;text-wrap:balance;">Every constant, traced to a sweep.</h1>
+      <p style="font-size:18px;line-height:1.6;color:#9AA4B4;max-width:640px;margin:0;">All experiments replay real on-chain swaps at <span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;font-size:15px;">sqrtPriceX96</span> precision against an oracle ground truth. This page shows the windows, the sweeps that picked each value, and the honest limits of what was measured.</p>
+    </header>
+
+    <section id="setup" style="max-width:1100px;margin:0 auto;padding:48px 28px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;color:#3DE0A0;">A / EXPERIMENTAL SETUP</span>
+        <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(61,224,160,0.4),transparent);"></span>
+      </div>
+      <div class="pg-2col" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:30px;">
+        <div style="background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012));border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;"><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;margin-bottom:6px;">16-anchor alignment</div><p style="font-size:13.5px;line-height:1.5;color:#9AA4B4;margin:0;">Piecewise real-time alignment between pool events and the reference feed.</p></div>
+        <div style="background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012));border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;"><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;margin-bottom:6px;">&plusmn;300 s rolling median</div><p style="font-size:13.5px;line-height:1.5;color:#9AA4B4;margin:0;">De-trends the pool-vs-fair spread. 62% of raw variance is slow basis &mdash; not charged.</p></div>
+        <div style="background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012));border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;"><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;margin-bottom:6px;">Binance 1 s candles</div><p style="font-size:13.5px;line-height:1.5;color:#9AA4B4;margin:0;">Calm-window reference. Volatile uses Pyth ETH/USD on a 12&ndash;60 s adaptive cadence.</p></div>
+        <div style="background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012));border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;"><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;margin-bottom:6px;">Pyth benchmark prices</div><p style="font-size:13.5px;line-height:1.5;color:#9AA4B4;margin:0;">Historical benchmark feed used as the oracle ground truth for precision.</p></div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#9AA4B4;margin-bottom:12px;">CALIBRATION WINDOWS</div>
+      <div class="pg-scroll" style="background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;">
+        <table style="font-size:13.5px;min-width:680px;">
+          <thead><tr style="background:rgba(255,255,255,0.03);">
+            <th style="text-align:left;padding:14px 18px;font-weight:600;color:#9AA4B4;font-size:11.5px;letter-spacing:0.08em;border-bottom:1px solid rgba(255,255,255,0.08);">WINDOW</th>
+            <th style="text-align:left;padding:14px 18px;font-weight:600;color:#9AA4B4;font-size:11.5px;letter-spacing:0.08em;border-bottom:1px solid rgba(255,255,255,0.08);">POOL / REFERENCE</th>
+            <th style="text-align:left;padding:14px 18px;font-weight:600;color:#9AA4B4;font-size:11.5px;letter-spacing:0.08em;border-bottom:1px solid rgba(255,255,255,0.08);">RESULT</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:top;"><div style="display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:#46D6E6;"></span><span style="font-weight:600;color:#9FD9E8;">Calm</span></div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5E6675;margin-top:6px;">2026-05-30 · 20:04&ndash;22:30 UTC</div></td>
+              <td style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:top;color:#C9D0DB;">Arbitrum WETH/USDC 0.05%<div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5E6675;margin-top:4px;">Binance ETHUSDC 1 s</div></td>
+              <td style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.05);vertical-align:top;"><span style="font-family:'JetBrains Mono',monospace;color:#EEF1F6;">629 swaps</span> · median &Delta; 0.82 bps · capture 17%</td>
+            </tr>
+            <tr>
+              <td style="padding:16px 18px;vertical-align:top;"><div style="display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:#FF7A5C;"></span><span style="font-weight:600;color:#FFB59E;">Volatile</span></div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5E6675;margin-top:6px;">2026-05-23 · 17:00&ndash;21:00 UTC · 430 bps</div></td>
+              <td style="padding:16px 18px;vertical-align:top;color:#C9D0DB;">Same pool<div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5E6675;margin-top:4px;">Pyth ETH/USD · 12&ndash;60 s adaptive</div></td>
+              <td style="padding:16px 18px;vertical-align:top;"><span style="font-family:'JetBrains Mono',monospace;color:#EEF1F6;">6,444 swaps</span> · median &Delta; 3.70 bps · capture ~24&ndash;26% · LP bleed 22&times;/hr</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:12.5px;color:#5E6675;margin:14px 0 0;">Of these, <span style="font-family:'JetBrains Mono',monospace;color:#9AA4B4;">4,511</span> priced swaps (629 calm + 3,882 volatile) were replayed as the regression-test corpus behind every precision and capture figure.</p>
+    </section>
+    <section id="sweeps" style="max-width:1100px;margin:0 auto;padding:48px 28px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;color:#3DE0A0;">B / PREMIUM SLOPE &alpha; SWEEP</span>
+        <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(61,224,160,0.4),transparent);"></span>
+      </div>
+      <div class="pg-2col" style="display:grid;grid-template-columns:1.32fr 0.68fr;gap:36px;align-items:center;">
+        <div style="background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012));border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:24px 26px 16px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.1em;color:#9AA4B4;">TRUTH-CAPTURE vs &alpha;</span>
+            <span style="font-size:11.5px;color:#5E6675;">capture is first-order linear in &alpha;</span>
+          </div>
+          <svg viewBox="0 0 560 300" width="100%" style="display:block;">
+            <line x1="60" y1="57.7" x2="520" y2="57.7" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="3 5"/>
+            <line x1="60" y1="128.5" x2="520" y2="128.5" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="3 5"/>
+            <line x1="60" y1="199.2" x2="520" y2="199.2" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="3 5"/>
+            <line x1="60" y1="270" x2="520" y2="270" stroke="rgba(255,255,255,0.16)" stroke-width="1.2"/>
+            <text x="52" y="61" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="#5E6675">60%</text>
+            <text x="52" y="132" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="#5E6675">40%</text>
+            <text x="52" y="203" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="#5E6675">20%</text>
+            <text x="52" y="274" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="#5E6675">0%</text>
+            <rect x="231.9" y="40" width="10" height="230" fill="rgba(61,224,160,0.08)"/>
+            <line x1="236.9" y1="40" x2="236.9" y2="270" stroke="rgba(61,224,160,0.5)" stroke-width="1.2" stroke-dasharray="4 4"/>
+            <text x="236.9" y="288" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="#3DE0A0">&alpha; = 0.5</text>
+            <text x="148.5" y="288" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#5E6675">0.25</text>
+            <text x="325.4" y="288" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#5E6675">0.75</text>
+            <text x="413.8" y="288" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#5E6675">1.0</text>
+            <text x="502.3" y="288" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#5E6675">1.25</text>
+            <polyline points="148.5,224.9 192.7,202.2 236.9,179.6 281.1,157.0 325.4,134.4 369.6,111.7 413.8,89.0 502.3,45.9" fill="none" stroke="#3DE0A0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="148.5,229.5 192.7,209.2 236.9,188.7 281.1,168.4 325.4,148.0 369.6,127.7 413.8,107.0 502.3,66.5" fill="none" stroke="#46D6E6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="236.9" cy="179.6" r="5" fill="#3DE0A0" stroke="#07080C" stroke-width="2"/>
+            <circle cx="236.9" cy="188.7" r="5" fill="#46D6E6" stroke="#07080C" stroke-width="2"/>
+            <text x="248" y="176" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="#3DE0A0">25.56%</text>
+            <text x="248" y="202" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="#9FD9E8">22.98%</text>
+          </svg>
+          <div style="display:flex;gap:20px;justify-content:center;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);margin-top:6px;">
+            <div style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:#9AA4B4;"><span style="width:16px;height:3px;border-radius:2px;background:#3DE0A0;"></span>Volatile</div>
+            <div style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:#9AA4B4;"><span style="width:16px;height:3px;border-radius:2px;background:#46D6E6;"></span>Calm</div>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px;line-height:1.15;margin:0 0 14px;">Why &alpha; = 0.5.</h3>
+          <p style="font-size:15px;line-height:1.6;color:#9AA4B4;margin:0 0 16px;">Capture rises almost perfectly linearly with the premium slope &mdash; more &alpha; harvests more, but charges more. Precision stays put: <span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;">~92.4%</span> calm and <span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;">~98.9%</span> volatile across the whole sweep.</p>
+          <p style="font-size:15px;line-height:1.6;color:#9AA4B4;margin:0;">PegGuard pins the conservative midpoint &mdash; enough capture to return value, low enough to keep the fee gentle on real LPs.</p>
+        </div>
+      </div>
+    </section>
+    <section style="max-width:1100px;margin:0 auto;padding:48px 28px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;color:#3DE0A0;">C / DEADBAND &amp; STALENESS KNEES</span>
+        <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(61,224,160,0.4),transparent);"></span>
+      </div>
+      <div class="pg-2col" style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:18px;">
+        <div style="background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px 24px;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;margin-bottom:4px;">Deadband sweep <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5E6675;font-weight:400;">&tau; = 450 s</span></div>
+          <p style="font-size:13px;color:#9AA4B4;margin:0 0 16px;">Selected <span style="font-family:'JetBrains Mono',monospace;color:#3DE0A0;">0.5 bp</span> (50 e2) &mdash; the precision/capture knee in each window.</p>
+          <table style="font-size:13px;">
+            <thead><tr style="color:#5E6675;font-size:11px;letter-spacing:0.06em;"><th style="text-align:left;padding:6px 6px;font-weight:600;">DEADBAND</th><th style="text-align:right;padding:6px 6px;font-weight:600;">CALM P / C</th><th style="text-align:right;padding:6px 6px;font-weight:600;">VOL P / C</th></tr></thead>
+            <tbody style="font-family:'JetBrains Mono',monospace;">
+              <tr><td style="padding:9px 6px;border-top:1px solid rgba(255,255,255,0.06);color:#9AA4B4;">0.0 bp</td><td style="padding:9px 6px;border-top:1px solid rgba(255,255,255,0.06);text-align:right;color:#C9D0DB;">90.83 / 28.21</td><td style="padding:9px 6px;border-top:1px solid rgba(255,255,255,0.06);text-align:right;color:#C9D0DB;">98.45 / 26.98</td></tr>
+              <tr style="background:rgba(61,224,160,0.08);"><td style="padding:9px 6px;border-top:1px solid rgba(61,224,160,0.25);color:#3DE0A0;font-weight:700;">0.5 bp &#9656;</td><td style="padding:9px 6px;border-top:1px solid rgba(61,224,160,0.25);text-align:right;color:#3DE0A0;font-weight:700;">92.42 / 22.98</td><td style="padding:9px 6px;border-top:1px solid rgba(61,224,160,0.25);text-align:right;color:#3DE0A0;font-weight:700;">98.86 / 25.56</td></tr>
+              <tr><td style="padding:9px 6px;border-top:1px solid rgba(255,255,255,0.06);color:#9AA4B4;">1.0 bp</td><td style="padding:9px 6px;border-top:1px solid rgba(255,255,255,0.06);text-align:right;color:#C9D0DB;">93.60 / 18.23</td><td style="padding:9px 6px;border-top:1px solid rgba(255,255,255,0.06);text-align:right;color:#C9D0DB;">99.15 / 24.23</td></tr>
+            </tbody>
+          </table>
+          <div style="font-size:11.5px;color:#5E6675;margin-top:12px;">P = precision %, C = truth-capture %. Higher deadband trades capture for precision.</div>
+        </div>
+        <div style="background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px 24px;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;margin-bottom:4px;">Staleness guard</div>
+          <p style="font-size:13px;color:#9AA4B4;margin:0 0 16px;">Older oracle data can <span style="color:#FFB59E;">inflate revenue while precision collapses</span> &mdash; so the live Pyth-pull guard is a hard rule, not a tunable.</p>
+          <div style="margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:#9FD9E8;margin-bottom:8px;"><span style="font-weight:600;">Calm precision retained</span><span style="font-family:'JetBrains Mono',monospace;color:#3DE0A0;">guard 5 s</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-family:'JetBrains Mono',monospace;font-size:12px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:36px;color:#5E6675;">2 s</span><span style="flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,#46D6E6 98%,rgba(255,255,255,0.06) 98%);"></span><span style="color:#C9D0DB;">98%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:36px;color:#3DE0A0;">5 s &#9656;</span><span style="flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,#3DE0A0 95%,rgba(255,255,255,0.06) 95%);"></span><span style="color:#3DE0A0;">95%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:36px;color:#5E6675;">10 s</span><span style="flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,#FFB454 91%,rgba(255,255,255,0.06) 91%);"></span><span style="color:#C9D0DB;">91%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:36px;color:#5E6675;">30 s</span><span style="flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,#FF7A5C 77%,rgba(255,255,255,0.06) 77%);"></span><span style="color:#C9D0DB;">77%</span></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:#FFB59E;margin-bottom:8px;"><span style="font-weight:600;">Volatile precision retained</span><span style="font-family:'JetBrains Mono',monospace;color:#3DE0A0;">guard 2 s</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-family:'JetBrains Mono',monospace;font-size:12px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:36px;color:#3DE0A0;">2 s &#9656;</span><span style="flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,#3DE0A0 95%,rgba(255,255,255,0.06) 95%);"></span><span style="color:#3DE0A0;">95%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:36px;color:#5E6675;">5 s</span><span style="flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,#FFB454 87%,rgba(255,255,255,0.06) 87%);"></span><span style="color:#C9D0DB;">87%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:36px;color:#5E6675;">30 s</span><span style="flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,#FF7A5C 72%,rgba(255,255,255,0.06) 72%);"></span><span style="color:#C9D0DB;">72%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="sentinel" style="max-width:1100px;margin:0 auto;padding:48px 28px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;color:#3DE0A0;">D / SENTINEL CALIBRATION SWEEP</span>
+        <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(61,224,160,0.4),transparent);"></span>
+      </div>
+      <div class="pg-2col" style="display:grid;grid-template-columns:0.62fr 1.38fr;gap:32px;align-items:start;">
+        <div>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px;line-height:1.15;margin:0 0 14px;">40 bps / 180 s.</h3>
+          <p style="font-size:15px;line-height:1.6;color:#9AA4B4;margin:0 0 16px;">Swept on the corrected volatile fixture (1,108 swaps, 418 bps) and a 250-event calm sentinel. The selected setting is the <span style="color:#EEF1F6;font-weight:600;">tightest trigger with zero calm false positives</span>.</p>
+          <p style="font-size:15px;line-height:1.6;color:#9AA4B4;margin:0 0 16px;">It arms the volatile regime <span style="color:#EEF1F6;font-weight:600;">74 minutes</span> before the measured heavy-bleed window. The looser 60 bps trigger only fires in-window &mdash; after <span style="font-family:'JetBrains Mono',monospace;color:#FF8E5C;">$2,399</span> has already bled.</p>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5E6675;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:12px 14px;line-height:1.5;word-break:break-all;">SHA-256<br>4eb34aa0&hellip;bbae8348</div>
+        </div>
+        <div class="pg-scroll" style="background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;">
+          <table style="font-size:13px;min-width:640px;font-family:'JetBrains Mono',monospace;">
+            <thead><tr style="background:rgba(255,255,255,0.03);color:#9AA4B4;font-size:10.5px;letter-spacing:0.06em;">
+              <th style="text-align:left;padding:12px 14px;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.08);">TRIG</th>
+              <th style="text-align:right;padding:12px 14px;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.08);">WINDOW</th>
+              <th style="text-align:right;padding:12px 14px;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.08);">CALM FP</th>
+              <th style="text-align:right;padding:12px 14px;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.08);">VOL TRIG</th>
+              <th style="text-align:right;padding:12px 14px;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.08);">1st VOL</th>
+              <th style="text-align:right;padding:12px 14px;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.08);">BLED</th>
+            </tr></thead>
+            <tbody>
+              <tr><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.05);color:#9AA4B4;">20</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.05);text-align:right;color:#9AA4B4;">180</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.05);text-align:right;color:#3DE0A0;">0</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.05);text-align:right;color:#C9D0DB;">14</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.05);text-align:right;color:#C9D0DB;">1825 s</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.05);text-align:right;color:#5E6675;">&mdash;</td></tr>
+              <tr><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);color:#9AA4B4;">20</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">300</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FFB454;">1</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">15</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">1825 s</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">&mdash;</td></tr>
+              <tr><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);color:#9AA4B4;">20</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">600</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FF7A5C;">3</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">22</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">1825 s</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">&mdash;</td></tr>
+              <tr><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);color:#9AA4B4;">30</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">180</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#3DE0A0;">0</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">10</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">4332 s</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">&mdash;</td></tr>
+              <tr><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);color:#9AA4B4;">30</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">300</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#3DE0A0;">0</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">12</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">4332 s</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">&mdash;</td></tr>
+              <tr><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);color:#9AA4B4;">30</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">600</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FFB454;">1</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">16</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">4332 s</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">&mdash;</td></tr>
+              <tr style="background:rgba(61,224,160,0.1);"><td style="padding:10px 14px;border-top:1px solid rgba(61,224,160,0.3);color:#3DE0A0;font-weight:700;">40 &#9656;</td><td style="padding:10px 14px;border-top:1px solid rgba(61,224,160,0.3);text-align:right;color:#3DE0A0;font-weight:700;">180</td><td style="padding:10px 14px;border-top:1px solid rgba(61,224,160,0.3);text-align:right;color:#3DE0A0;font-weight:700;">0</td><td style="padding:10px 14px;border-top:1px solid rgba(61,224,160,0.3);text-align:right;color:#3DE0A0;font-weight:700;">6</td><td style="padding:10px 14px;border-top:1px solid rgba(61,224,160,0.3);text-align:right;color:#3DE0A0;font-weight:700;">4332 s</td><td style="padding:10px 14px;border-top:1px solid rgba(61,224,160,0.3);text-align:right;color:#7EE9C0;">pre-window</td></tr>
+              <tr><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);color:#9AA4B4;">40</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">300</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#3DE0A0;">0</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">6</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">4332 s</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">&mdash;</td></tr>
+              <tr><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);color:#9AA4B4;">40</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">600</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#3DE0A0;">0</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">8</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">4332 s</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">&mdash;</td></tr>
+              <tr><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);color:#9AA4B4;">60</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">180</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#3DE0A0;">0</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">3</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FFB59E;">12656 s</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FF8E5C;">$2,399</td></tr>
+              <tr><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);color:#9AA4B4;">60</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">300</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#3DE0A0;">0</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">4</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FFB59E;">12656 s</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FF8E5C;">$2,399</td></tr>
+              <tr><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);color:#9AA4B4;">60</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">600</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#3DE0A0;">0</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#C9D0DB;">4</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FFB59E;">12656 s</td><td style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FF8E5C;">$2,399</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section id="buckets" style="max-width:1100px;margin:0 auto;padding:48px 28px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;color:#3DE0A0;">E / NET LP BY SWAP SIZE</span>
+        <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(61,224,160,0.4),transparent);"></span>
+      </div>
+      <p style="font-size:15px;color:#9AA4B4;margin:0 0 22px;max-width:640px;">Net LP outcome and premium precision per bucket. Live forward-test P&amp;L is deliberately omitted &mdash; these are the calibrated calm and volatile windows only.</p>
+      <div class="pg-2col" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+        <div style="background:linear-gradient(180deg,rgba(70,214,230,0.05),rgba(255,255,255,0.01));border:1px solid rgba(70,214,230,0.22);border-radius:16px;padding:20px 22px;">
+          <div style="display:flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;margin-bottom:14px;"><span style="width:9px;height:9px;border-radius:50%;background:#46D6E6;"></span>Calm window</div>
+          <table style="font-size:13px;">
+            <thead><tr style="color:#5E6675;font-size:10.5px;letter-spacing:0.05em;"><th style="text-align:left;padding:6px 4px;font-weight:600;">BUCKET</th><th style="text-align:right;padding:6px 4px;font-weight:600;">NET bps</th><th style="text-align:right;padding:6px 4px;font-weight:600;">PREC.</th><th style="text-align:right;padding:6px 4px;font-weight:600;">n</th></tr></thead>
+            <tbody style="font-family:'JetBrains Mono',monospace;">
+              <tr><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.06);color:#C9D0DB;font-family:'Hanken Grotesk';">&lt;$1k</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.06);text-align:right;color:#3DE0A0;">+1.29</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.06);text-align:right;color:#9AA4B4;">84.0%</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.06);text-align:right;color:#5E6675;">295</td></tr>
+              <tr><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);color:#C9D0DB;font-family:'Hanken Grotesk';">$1k&ndash;$10k</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#3DE0A0;">+2.00</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">93.2%</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">331</td></tr>
+              <tr><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);color:#C9D0DB;font-family:'Hanken Grotesk';">$10k&ndash;$50k</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#3DE0A0;">+0.43</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">100%</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FFB454;">2</td></tr>
+              <tr><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);color:#5E6675;font-family:'Hanken Grotesk';">&ge;$50k</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">&mdash;</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">&mdash;</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">0</td></tr>
+            </tbody>
+          </table>
+          <div style="font-size:11.5px;color:#7EE9C0;margin-top:10px;">Every populated bucket returns net-positive value.</div>
+        </div>
+        <div style="background:linear-gradient(180deg,rgba(255,122,92,0.05),rgba(255,255,255,0.01));border:1px solid rgba(255,122,92,0.2);border-radius:16px;padding:20px 22px;">
+          <div style="display:flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;margin-bottom:14px;"><span style="width:9px;height:9px;border-radius:50%;background:#FF7A5C;"></span>Volatile window</div>
+          <table style="font-size:13px;">
+            <thead><tr style="color:#5E6675;font-size:10.5px;letter-spacing:0.05em;"><th style="text-align:left;padding:6px 4px;font-weight:600;">BUCKET</th><th style="text-align:right;padding:6px 4px;font-weight:600;">NET bps</th><th style="text-align:right;padding:6px 4px;font-weight:600;">PREC.</th><th style="text-align:right;padding:6px 4px;font-weight:600;">n</th></tr></thead>
+            <tbody style="font-family:'JetBrains Mono',monospace;">
+              <tr><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.06);color:#C9D0DB;font-family:'Hanken Grotesk';">&lt;$1k</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.06);text-align:right;color:#3DE0A0;">+0.67</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.06);text-align:right;color:#9AA4B4;">99.1%</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.06);text-align:right;color:#5E6675;">958</td></tr>
+              <tr><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);color:#C9D0DB;font-family:'Hanken Grotesk';">$1k&ndash;$10k</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FFB59E;">&minus;0.26</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">98.6%</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">2,663</td></tr>
+              <tr><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);color:#C9D0DB;font-family:'Hanken Grotesk';">$10k&ndash;$50k</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FF8E5C;">&minus;3.10</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">98.7%</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#5E6675;">254</td></tr>
+              <tr><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);color:#9AA4B4;font-family:'Hanken Grotesk';">&ge;$50k</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">+19.69</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#9AA4B4;">100%</td><td style="padding:9px 4px;border-top:1px solid rgba(255,255,255,0.04);text-align:right;color:#FFB454;">7</td></tr>
+            </tbody>
+          </table>
+          <div style="font-size:11.5px;color:#5E6675;margin-top:10px;">Amber <span style="color:#FFB454;">n</span> = small sample; read as directional, not precise.</div>
+        </div>
+      </div>
+    </section>
+    <section style="max-width:1100px;margin:0 auto;padding:48px 28px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;color:#3DE0A0;">F / ARCHITECTURE CONCLUSIONS</span>
+        <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(61,224,160,0.4),transparent);"></span>
+      </div>
+      <div class="pg-2col" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012));border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px;display:flex;gap:16px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:22px;color:#3DE0A0;line-height:1;">01</div>
+          <div><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15.5px;margin-bottom:6px;">Hot path uses Pyth pull</div><p style="font-size:13.5px;line-height:1.55;color:#9AA4B4;margin:0;">The race clock is the pool's ~14 s update interval, not the arbitrageur's sub-2 s execution. Pyth at 2 s staleness retains <span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;">88%</span> of edge.</p></div>
+        </div>
+        <div style="background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012));border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px;display:flex;gap:16px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:22px;color:#FF8E5C;line-height:1;">02</div>
+          <div><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15.5px;margin-bottom:6px;">Staleness is a trap</div><p style="font-size:13.5px;line-height:1.55;color:#9AA4B4;margin:0;">Older data raises measured revenue <span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;">25%&rarr;41%</span> while precision collapses <span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;">95%&rarr;72%</span>. Revenue can reward bad operation &mdash; so the guard is hard.</p></div>
+        </div>
+        <div style="background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012));border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px;display:flex;gap:16px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:22px;color:#7FA8F2;line-height:1;">03</div>
+          <div><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15.5px;margin-bottom:6px;">Consensus ceiling = best member</div><p style="font-size:13.5px;line-height:1.55;color:#9AA4B4;margin:0;">An AMM-only basket captured <span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;">3%</span>; adding CEX only reached the pure-CEX <span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;">44%</span>. Pairs with CEX feeds use Pyth directly.</p></div>
+        </div>
+        <div style="background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012));border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px;display:flex;gap:16px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:22px;color:#B6A6FF;line-height:1;">04</div>
+          <div><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15.5px;margin-bottom:6px;">Reactive only in control plane</div><p style="font-size:13.5px;line-height:1.55;color:#9AA4B4;margin:0;">Regime changes, breaker signals and baseline upkeep have minute-scale budgets where cross-chain delivery latency is acceptable.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="caveats" style="max-width:1100px;margin:0 auto;padding:48px 28px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;color:#3DE0A0;">G / HONEST CAVEATS &amp; OPEN ITEMS</span>
+        <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(61,224,160,0.4),transparent);"></span>
+      </div>
+      <div class="pg-2col" style="display:grid;grid-template-columns:1.05fr 0.95fr;gap:32px;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;gap:13px;align-items:flex-start;"><span style="color:#FFB454;font-size:14px;margin-top:2px;">&#9888;</span><p style="font-size:14.5px;line-height:1.55;color:#9AA4B4;margin:0;"><span style="color:#EEF1F6;font-weight:600;">Capture is a same-swaps upper bound.</span> Route-away elasticity is not modeled &mdash; in production, charging a premium may deter some of the very flow it prices.</p></div>
+          <div style="display:flex;gap:13px;align-items:flex-start;"><span style="color:#FFB454;font-size:14px;margin-top:2px;">&#9888;</span><p style="font-size:14.5px;line-height:1.55;color:#9AA4B4;margin:0;"><span style="color:#EEF1F6;font-weight:600;">No forward-test P&amp;L is claimed.</span> Every figure is a calibrated backtest. PegGuard makes no &ldquo;profitable in production&rdquo; claim.</p></div>
+          <div style="display:flex;gap:13px;align-items:flex-start;"><span style="color:#FFB454;font-size:14px;margin-top:2px;">&#9888;</span><p style="font-size:14.5px;line-height:1.55;color:#9AA4B4;margin:0;"><span style="color:#EEF1F6;font-weight:600;">RSC false-positive coverage is partial.</span> Validated on the supplied 250-event calm fixture; broader coverage is an open item.</p></div>
+          <div style="display:flex;gap:13px;align-items:flex-start;"><span style="color:#FFB454;font-size:14px;margin-top:2px;">&#9888;</span><p style="font-size:14.5px;line-height:1.55;color:#9AA4B4;margin:0;"><span style="color:#EEF1F6;font-weight:600;">Guard-mode dual-feed is a skeleton.</span> The stable-pair depeg replay (e.g. USDC/USD &divide; USDT/USD) remains separate; the current path uses a single feed.</p></div>
+        </div>
+        <div style="background:linear-gradient(180deg,rgba(91,141,239,0.06),rgba(255,255,255,0.01));border:1px solid rgba(91,141,239,0.22);border-radius:16px;padding:22px 24px;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;margin-bottom:4px;">Stable-pair audit</div>
+          <p style="font-size:13px;color:#9AA4B4;margin:0 0 16px;">Why GUARD charges no directional premium &mdash; a provenance audit, not a depeg replay.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
+            <div style="display:flex;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="color:#9AA4B4;">Normal stable deviation</span><span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;">0.00&ndash;0.35 bps</span></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="color:#9AA4B4;">Feed noise</span><span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;">~0.2 bps</span></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="color:#9AA4B4;">AMM basket capture</span><span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;">0.60%</span></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="color:#9AA4B4;">AMM + CEX capture</span><span style="font-family:'JetBrains Mono',monospace;color:#C9D0DB;">6.30% · corr 0.58</span></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;"><span style="color:#9AA4B4;">GUARD trip margin</span><span style="font-family:'JetBrains Mono',monospace;color:#3DE0A0;font-weight:600;">142.9&times;</span></div>
+          </div>
+          <p style="font-size:12.5px;color:#5E6675;margin:16px 0 0;line-height:1.5;">Signal sits at feed-noise level &mdash; no directional fuel. The breaker is cleanly separated from normal stable noise.</p>
+        </div>
+      </div>
+    </section>
+    <footer style="position:relative;border-top:1px solid rgba(255,255,255,0.08);margin-top:48px;">
+      <div style="max-width:1100px;margin:0 auto;padding:54px 28px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;">
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px;margin-bottom:6px;">Measured, not guessed.</div>
+          <div style="font-size:13.5px;color:#5E6675;font-family:'JetBrains Mono',monospace;">PEGGUARD · UHI9 · PYTH × REACTIVE</div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="#" style="font-size:14px;font-weight:600;padding:11px 18px;border-radius:11px;color:#07110D;background:linear-gradient(180deg,#4DEBAC,#16BD86);" style-hover="filter:brightness(1.06);">GitHub</a>
+          <a href="https://pegguard.matseoi.com" target="_blank" style="font-size:14px;font-weight:600;padding:11px 18px;border-radius:11px;border:1px solid rgba(255,255,255,0.14);color:#C9D0DB;" style-hover="border-color:rgba(255,255,255,0.3);">Live site</a>
+          <a href="PegGuard.dc.html" style="font-size:14px;font-weight:600;padding:11px 18px;border-radius:11px;border:1px solid rgba(255,255,255,0.14);color:#C9D0DB;" style-hover="border-color:rgba(255,255,255,0.3);">&larr; Back to overview</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1120,&quot;height&quot;:900}}"></script>
+<!--pg-rail-start-->
+<style id="pg-rail-style">
+.pg-rail{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;gap:2px;font-family:'Hanken Grotesk',sans-serif;opacity:0;transition:opacity .45s ease;pointer-events:none;}
+.pg-rail.ready{opacity:1;pointer-events:auto;}
+.pg-rail a{display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:5px 0;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.pg-rail .pg-label{font-size:12.5px;font-weight:500;color:rgba(201,208,219,0.45);transition:color .2s ease,transform .2s ease;white-space:nowrap;}
+.pg-rail .pg-dot{position:relative;width:9px;height:9px;flex:none;border-radius:50%;border:1.5px solid rgba(255,255,255,0.22);background:transparent;transition:all .22s ease;}
+.pg-rail a:hover .pg-label{color:#EEF1F6;transform:translateX(-2px);}
+.pg-rail a:hover .pg-dot{border-color:rgba(61,224,160,0.75);}
+.pg-rail a.active .pg-label{color:#EEF1F6;font-weight:600;}
+.pg-rail a.active .pg-dot{background:#3DE0A0;border-color:#3DE0A0;box-shadow:0 0 0 4px rgba(61,224,160,0.16);}
+@media (max-width:1360px){
+  .pg-rail{right:16px;}
+  .pg-rail .pg-label{display:none;}
+  .pg-rail a.active .pg-label{display:block;color:#3DE0A0;font-weight:600;font-size:12px;}
+}
+@media (max-width:520px){ .pg-rail{right:10px;} }
+@media print{ .pg-rail{display:none;} }
+</style>
+<script id="pg-rail-script">
+(function(){
+  var SECTIONS = [{"id": "setup", "label": "Setup"}, {"id": "sweeps", "label": "Sweeps"}, {"id": "sg2", "label": "Staleness"}, {"id": "sentinel", "label": "Sentinel"}, {"id": "buckets", "label": "Net by size"}, {"id": "caveats", "label": "Caveats"}];
+  var OFFSET = 88;
+  function byId(id){ return document.getElementById(id); }
+  function present(){ var n=0,i; for(i=0;i<SECTIONS.length;i++){ if(byId(SECTIONS[i].id)) n++; } return n; }
+  function topOf(el){ return el.getBoundingClientRect().top + window.pageYOffset; }
+  function build(){
+    if(byId('pg-rail-el')) return;
+    var items = SECTIONS.filter(function(s){ return byId(s.id); });
+    items.sort(function(a,b){ return topOf(byId(a.id)) - topOf(byId(b.id)); });
+    var rail = document.createElement('nav');
+    rail.className='pg-rail'; rail.id='pg-rail-el';
+    rail.setAttribute('aria-label','Section navigation');
+    var links=[];
+    items.forEach(function(s){
+      var a=document.createElement('a');
+      a.href='#'+s.id;
+      a.innerHTML='<span class="pg-label">'+s.label+'</span><span class="pg-dot"></span>';
+      a.addEventListener('click',function(e){
+        e.preventDefault();
+        var el=byId(s.id); if(!el) return;
+        var y=topOf(el)-OFFSET; window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+      });
+      rail.appendChild(a); links.push({a:a,id:s.id});
+    });
+    document.body.appendChild(rail);
+    function spy(){
+      var y=window.pageYOffset+OFFSET+10, active=0, i;
+      for(i=0;i<links.length;i++){ var el=byId(links[i].id); if(el && topOf(el)<=y) active=i; }
+      if((window.innerHeight+window.pageYOffset)>=document.body.scrollHeight-4) active=links.length-1;
+      for(i=0;i<links.length;i++){
+        var on=(i===active);
+        links[i].a.classList.toggle('active',on);
+        if(on) links[i].a.setAttribute('aria-current','true'); else links[i].a.removeAttribute('aria-current');
+      }
+    }
+    requestAnimationFrame(function(){ rail.classList.add('ready'); spy(); });
+    var ticking=false;
+    window.addEventListener('scroll',function(){ if(!ticking){ ticking=true; requestAnimationFrame(function(){ spy(); ticking=false; }); } },{passive:true});
+    window.addEventListener('resize',spy,{passive:true});
+  }
+  var tries=0, timer=setInterval(function(){
+    tries++;
+    if(present()>=Math.min(3,SECTIONS.length)){ clearInterval(timer); build(); }
+    else if(tries>160){ clearInterval(timer); if(present()>0) build(); }
+  },120);
+})();
+</script>
+<!--pg-rail-end-->
+
+</body>
+</html>

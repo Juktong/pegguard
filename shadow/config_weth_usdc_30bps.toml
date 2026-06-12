@@ -1,0 +1,26 @@
+[paths]
+database = "shadow/live_shadow_weth_usdc_30bps.sqlite3"
+reports = "docs/live-shadow-weth-usdc-30bps"
+
+[rpc]
+arbitrum_wss_primary = "wss://arbitrum-one-rpc.publicnode.com"
+arbitrum_wss_fallback = ""
+mainnet_wss_primary = "wss://ethereum-rpc.publicnode.com"
+mainnet_wss_fallback = ""
+
+[target]
+pool = "0xc473e2aEE3441BF9240Be85eb122aBB059A3B57c"
+
+[pyth]
+feed_id = "0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace"
+hermes_base_url = "https://hermes.pyth.network"
+
+[sentinel]
+pool = "0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640"
+trig_bps = 40
+window_sec = 180
+
+[run]
+report_interval_sec = 300
+truth_interval_sec = 30
+truth_delay_sec = 360
