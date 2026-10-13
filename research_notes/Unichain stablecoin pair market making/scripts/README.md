@@ -14,3 +14,4 @@ scratch directories and need adjusting before reuse.
 | `oracles_depeg/` | `oracles_depeg.md` |
 | `lp_economics/` | `lp_economics.md` |
 | `competition_incentives/` | `competition_incentives.md` |
+| `report_checks/` | `reports/Unichain stablecoin pair market making.md` (truth-labeler self-inclusion check) |
